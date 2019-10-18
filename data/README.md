@@ -2,8 +2,4 @@
 
 ## To download the pre-training dataset:
 
-https://1drv.ms/u/s!Ar0vPzfI6Urzag_6zS1mYZNpcms?e=61ZCM6
-
 ## To download the preprocessed fine-tuning dataset:
-
-https://1drv.ms/u/s!Ar0vPzfI6Urza_PK9nmZBRKtI_0?e=nlgWMm
