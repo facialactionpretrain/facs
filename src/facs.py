@@ -17,9 +17,16 @@ def display_summary(train_data_reader, val_data_reader, test_data_reader):
     '''
     FACS_count = train_data_reader.FACS_count
 
+
+    #########Uncomment this section for pre-training with MS Celeb dataset########
     FACS_header = ['AU01', 'AU02', 'AU04', 'AU05', 'AU06', 'AU07', 'AU09', 'AU10',
                     'AU10', 'AU12', 'AU14','AU15', 'AU17', 'AU20', 'AU23', 'AU25',
                     'AU26', 'AU28', 'AU45']
+
+    #########Uncomment this section for fine-turning with DISFA dataset###########
+    # FACS_header = ['AU01', 'AU02', 'AU04', 'AU05', 'AU06', 'AU07', 'AU09', 'AU10',
+    #             'AU10', 'AU12', 'AU14','AU15', 'AU17', 'AU20', 'AU23', 'AU25',
+    #             'AU26', 'AU28', 'AU45']
 
     logging.info("{0}\t{1}\t{2}\t{3}".format("".ljust(10), "Train", "Val", "Test"))
     for index in range(FACS_count):
