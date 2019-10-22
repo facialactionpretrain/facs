@@ -174,5 +174,4 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-    # main(args.base_folder, args.model_folder, args.training_mode)
     main(args.base_folder, args.model_folder, args.ft_model)
