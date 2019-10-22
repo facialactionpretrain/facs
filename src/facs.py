@@ -11,7 +11,7 @@ from rect_util import Rect
 import img_util as imgu
 import matplotlib.pyplot as plt
 
-def display_summary(train_data_reader, val_data_reader, test_data_reader):
+def display_summary(train_data_reader, test_data_reader):
     '''
     Summarize the data in a tabular format.
     '''
@@ -20,7 +20,7 @@ def display_summary(train_data_reader, val_data_reader, test_data_reader):
 
     #########Uncomment this section for pre-training with MS Celeb dataset########
     FACS_header = ['AU01', 'AU02', 'AU04', 'AU05', 'AU06', 'AU07', 'AU09', 'AU10',
-                    'AU10', 'AU12', 'AU14','AU15', 'AU17', 'AU20', 'AU23', 'AU25',
+                    'AU12', 'AU14','AU15', 'AU17', 'AU20', 'AU23', 'AU25',
                     'AU26', 'AU28', 'AU45']
 
     #########Uncomment this section for fine-turning with DISFA dataset###########
@@ -28,22 +28,20 @@ def display_summary(train_data_reader, val_data_reader, test_data_reader):
     #             'AU10', 'AU12', 'AU14','AU15', 'AU17', 'AU20', 'AU23', 'AU25',
     #             'AU26', 'AU28', 'AU45']
 
-    logging.info("{0}\t{1}\t{2}\t{3}".format("".ljust(10), "Train", "Val", "Test"))
+    logging.info("{0}\t{1}\t{2}".format("".ljust(10), "Train", "Test"))
     for index in range(FACS_count):
-        logging.info("{0}\t{1}\t{2}\t{3}".format(FACS_header[index].ljust(10), 
+        logging.info("{0}\t{1}\t{2}".format(FACS_header[index].ljust(10), 
                      train_data_reader.per_FACS_count[index], 
-                     val_data_reader.per_FACS_count[index], 
                      test_data_reader.per_FACS_count[index]))
 
 class FACSParameters():
     '''
     FACS reader parameters
     '''
-    def __init__(self, target_size, width, height, training_mode="majority", determinisitc=False, shuffle=True):
+    def __init__(self, target_size, width, height, determinisitc=False, shuffle=True):
         self.target_size   = target_size
         self.width         = width
         self.height        = height
-        self.training_mode = training_mode
         self.determinisitc = determinisitc
         self.shuffle       = shuffle
                      
@@ -55,7 +53,7 @@ class FACSReader(object):
         Factory function that create an instance of FACSReader and load the data form disk.
         '''
         reader = cls(base_folder, sub_folders, label_file_name, parameters)
-        reader.load_folders(parameters.training_mode)
+        reader.load_folders()
         return reader
         
     def __init__(self, base_folder, sub_folders, label_file_name, parameters):
@@ -69,7 +67,6 @@ class FACSReader(object):
         self.width           = parameters.width
         self.height          = parameters.height
         self.shuffle         = parameters.shuffle
-        self.training_mode   = parameters.training_mode
 
         # data augmentation parameters.determinisitc
         if parameters.determinisitc:
@@ -143,7 +140,7 @@ class FACSReader(object):
         self.batch_start += current_batch_size
         return inputs, targets, current_batch_size
         
-    def load_folders(self, mode):
+    def load_folders(self):
         '''
         Load the actual images from disk. While loading, we normalize the input data.
         '''
@@ -170,11 +167,11 @@ class FACSReader(object):
                     # face rectangle 
                     box = list(map(int, row[1][1:-1].split(',')))
                     face_rc = Rect(box)
-                    FACS = list(map(float, row[2:len(row)]))
+                    FACS = list(map(float, row[3:len(row)]))
 
                     self.data.append((image_path, image_data, FACS, face_rc))
                     # Keeps track for summary printout
-                    count_AU = np.array(row[2:len(row)], dtype=np.int32)
+                    count_AU = np.array(row[3:len(row)], dtype=np.int32)
                     self.per_FACS_count += count_AU
         self.indices = np.arange(len(self.data))
         if self.shuffle:
@@ -182,18 +179,8 @@ class FACSReader(object):
     
     def _process_target(self, target, name):
         '''
-        Multi-target: 
+        Multi-label
         '''
-        if self.training_mode == 'majority' or self.training_mode == 'crossentropy': 
-            return target
-        elif self.training_mode == 'probability': 
-            idx             = np.random.choice(len(target), p=target) 
-            new_target      = np.zeros_like(target)
-            new_target[idx] = 1.0
-            return new_target
-        elif self.training_mode == 'multi_target': 
-            new_target = np.array(target)
-            new_target[new_target>0] = 1.0
-            return new_target
-
-   
+        new_target = np.array(target)
+        new_target[new_target>0] = 1.0
+        return new_target

@@ -1,9 +1,9 @@
-## This is the official repository for the FG2020 paper titled: A Scalable  Approach  for  Facial  Action  Unit  Classifier  TrainingUsing  Noisy  Data  for  Pre-Training
+# This is the official repository for the FG2020 paper titled: A Scalable  Approach  for  Facial  Action  Unit  Classifier  TrainingUsing  Noisy  Data  for  Pre-Training
 
 
 We provide the training code, training dataset, and our pre-trained models
 
-### Dataset
+## <b>Dataset</b>
 The dataset is organized as follows:
 ```
 /data
@@ -30,13 +30,31 @@ The pre-training dataset can be downloaded at:
 https://1drv.ms/u/s!Ar0vPzfI6Urzag_6zS1mYZNpcms?e=61ZCM6
 
 #### Labels
-OpenFace 2.0 annotations for each of the pre-training data is provided. The format of the CSV file (test_label.csv and train_label.csv) is as follows: image,rectsize,gender,AU01,AU02,AU04,AU05,AU06,AU07,AU09,AU10,AU12,AU14,AU15,AU17,AU20,AU23,AU25,AU26,AU28,AU45
+OpenFace 2.0 annotations for each of the pre-training data is provided. The format of the CSV file (test_label.csv and train_label.csv) is as follows: 
 
+```
+image,rectsize,gender,AU01,AU02,AU04,AU05,AU06,AU07,AU09,AU10,AU12,AU14,AU15,AU17,AU20,AU23,AU25,AU26,AU28,AU45
+```
 #### Fine-Tuning
 For the fine-tuning stage we used the DISFA dataset (http://mohammadmahoor.com/disfa/). All the frame from each video were extracted. We then used an off-the-shelf (OpenCV's DNN) face detector to detect and crop out the faces for each of the frames. The cropped images were then grayscaled and zero padded to maintain a square ratio before using them to fine-tune our model. 
 
 
-### Pre-Trained Models
+
+## <b>Training</b>
+
+### Pre-training
+For pre-training the model with the pre-annotated MS-Celeb-1M dataset
+```
+python src/train.py -d data -r models
+```
+
+### Fine-tuning
+For fine-tuning with DISFA dataset
+```
+python src/train.py -d data -r models -ft <pre_trained model location>
+```
+
+## <b>Pre-Trained Models</b>
 
 #### The pre-trained models used for fine-tuning:
 https://1drv.ms/u/s!Ar0vPzfI6Urzag_6zS1mYZNpcms?e=7e1QmH
