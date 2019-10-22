@@ -32,7 +32,6 @@ FACS_table =    {
                 'AU45'  : 17
                 }
 
-#TODO Change train and test folders
 # List of folders for training, validation and test.
 train_folders = ['pre_train_images']
 test_folders  = ['pre_train_images']
@@ -73,7 +72,6 @@ def main(base_folder, model_folder, ft_model, model_name='VGG13', max_epochs = 3
     train_params        = FACSParameters(num_classes, model.input_height, model.input_width, False)
     test_params = FACSParameters(num_classes, model.input_height, model.input_width, True)
 
-#TODO Chave data reader to be consistent with the label and test set
     train_data_reader   = FACSReader.create(base_folder, train_folders, "test_label.csv", train_params)
     test_data_reader    = FACSReader.create(base_folder, test_folders, "test_label.csv", test_params)
     
