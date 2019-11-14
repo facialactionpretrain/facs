@@ -72,7 +72,7 @@ def main(base_folder, model_folder, ft_model, model_name='VGG13', max_epochs = 3
     train_params        = FACSParameters(num_classes, model.input_height, model.input_width, False)
     test_params = FACSParameters(num_classes, model.input_height, model.input_width, True)
 
-    train_data_reader   = FACSReader.create(base_folder, train_folders, "test_label.csv", train_params)
+    train_data_reader   = FACSReader.create(base_folder, train_folders, "train_label.csv", train_params)
     test_data_reader    = FACSReader.create(base_folder, test_folders, "test_label.csv", test_params)
     
     # print summary of the data.
