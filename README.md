@@ -1,4 +1,4 @@
-# This is the official repository for the FG2020 paper titled: A Scalable  Approach  for  Facial  Action  Unit  Classifier  Training Using  Noisy  Data  for  Pre-Training
+# This is the official repository for the ECCV paper titled: 
 
 
 We provide the training code, training dataset, and our pre-trained models
